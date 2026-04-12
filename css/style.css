@@ -32,10 +32,12 @@ h2 {
 /* ==================== HERO SECTION ==================== */
 .hero {
   height: 100vh;
-  background: url('imagens/portfolio.jpeg') center/cover fixed;
+  /* O ../ faz o código sair da pasta 'css' e achar a pasta 'imagens' */
+  background: url('../imagens/portfolio.jpeg') center/cover fixed;
   position: relative;
   display: flex;
   align-items: center;
+  background-color: #000;
 }
 
 .overlay {
@@ -88,35 +90,33 @@ h2 {
 }
 
 /* ==================== GALERIA & LIGHTBOX ==================== */
-/* Container da Galeria - Cria a grade de 3 colunas no PC e 2 no Celular */
+/* Isso impede que as fotos estourem o tamanho da tela */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Isso organiza as fotos em colunas (quadradinhos) */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
-  width: 100%;
   max-width: 1200px;
-  margin: 20px auto;
-  padding: 0 15px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* Moldura da foto */
 .gallery-item {
   width: 100%;
-  aspect-ratio: 1 / 1; /* Força a foto a ser um quadrado perfeito */
+  aspect-ratio: 1 / 1; /* Força todas a serem quadradas */
   overflow: hidden;
-  border-radius: 12px;
-  background: #111;
-  position: relative;
-  cursor: pointer;
+  border-radius: 10px;
 }
 
-/* A imagem dentro da moldura */
 .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Corta as bordas da foto para ela preencher o quadrado sem esticar */
-  transition: transform 0.3s ease;
-  display: block;
+  object-fit: cover; /* Corta as sobras sem esticar a imagem */
 }
 
 .gallery-item:hover img {
@@ -208,4 +208,42 @@ img {
   .container img {
     max-width: 100%; /* No celular elas ocupam a largura da tela */
   }
+}
+/* 1. ADICIONE ISSO PARA AS FOTOS DE TEXTO (SOBRE E CONTATO) */
+.container img {
+  max-width: 400px; /* Isso impede que elas fiquem gigantes */
+  width: 100%;
+  border-radius: 15px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* 2. ADICIONE ISSO PARA A GALERIA FICAR ORGANIZADA */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.gallery-item {
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 3. CORRIJA O FUNDO (HERO) AQUI */
+.hero {
+  height: 100vh;
+  background: url('../imagens/portfolio.jpeg') center/cover fixed;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
