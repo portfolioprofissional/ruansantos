@@ -219,3 +219,59 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
 @media (max-width: 768px) {
   .lightbox-prev, .lightbox-next { display: none !important; }
 }
+/* --- ESTILIZAÇÃO DO PIX (PADRÃO DOS BOTÕES) --- */
+.pix-container {
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+.pix-label {
+    display: block;
+    font-family: 'Oswald', sans-serif;
+    color: gold; /* Cor igual aos títulos */
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+}
+
+.pix-box {
+    display: block !important;
+    width: 90% !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
+    padding: 14px 20px;
+    background-color: gold !important; /* Fundo dourado igual aos botões */
+    color: #000 !important; /* Texto preto para contraste */
+    border-radius: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+}
+/* ==================== RODAPÉ (FOOTER) ==================== */
+.footer {
+    padding: 30px 20px;
+    background: #000;
+    text-align: center;
+    border-top: 1px solid rgba(255, 215, 0, 0.2); /* Linha dourada bem fina */
+    margin-top: 50px;
+}
+
+.footer p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #888; /* Cinza para não brigar com o conteúdo principal */
+    font-family: 'Roboto', sans-serif;
+}
+
+.footer strong {
+    color: gold; /* Destaque no seu nome */
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
