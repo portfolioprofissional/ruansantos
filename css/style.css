@@ -1,13 +1,18 @@
-/* ==================== CONFIGURAÇÕES GERAIS ==================== */
-body {
+/* ==================== 1. CONFIGURAÇÕES GERAIS & TRAVA DE ZOOM ==================== */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* Mata o balanço lateral no celular */
+  width: 100%;
   margin: 0;
+  padding: 0;
   font-family: 'Roboto', sans-serif;
   background: #000;
   color: #fff;
-  font-weight: 300;
   line-height: 1.6;
-  font-size: 16px;
-  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box; /* Garante que nada empurre a largura do site */
 }
 
 h1, h2, h3 {
@@ -15,35 +20,33 @@ h1, h2, h3 {
   font-family: 'Oswald', sans-serif;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  text-align: center;
 }
 
-h1 {
-  font-size: clamp(2rem, 8vw, 3.5rem);
-  font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
+h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
 
-h2 {
-  font-size: clamp(1.5rem, 5vw, 2.2rem);
-  margin-bottom: 1rem;
-}
-
-/* ==================== HERO SECTION ==================== */
+/* ==================== 2. HERO SECTION (TOPO) ==================== */
 .hero {
   height: 100vh;
-  /* O ../ faz o código sair da pasta 'css' e achar a pasta 'imagens' */
-  background: url('../imagens/portfolio.jpeg') center/cover fixed;
+  background: url('../imagens/portfolio.jpeg') center/cover no-repeat !important;
   position: relative;
   display: flex;
   align-items: center;
-  background-color: #000;
+  justify-content: center;
+}
+
+/* Ajuste para a foto aparecer melhor no celular */
+@media (max-width: 768px) {
+  .hero {
+    background-attachment: scroll !important;
+    background-position: center center;
+  }
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.7), #000);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), #000);
   z-index: 1;
 }
 
@@ -52,7 +55,6 @@ h2 {
   z-index: 2;
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -67,312 +69,122 @@ h2 {
   box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
 }
 
-/* ==================== COMPONENTES ==================== */
-.btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 24px;
-  background: gold;
-  color: #000;
-  text-decoration: none;
-  border-radius: 10px;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: #ffd700;
-  transform: translateY(-2px);
-}
-
-/* ==================== GALERIA & LIGHTBOX ==================== */
-/* Isso impede que as fotos estourem o tamanho da tela */
-img {
-  max-width: 100%;
+/* ==================== 3. PADRONIZAÇÃO DE IMAGENS (SOBRE/CONTATO) ==================== */
+/* Isso faz as fotos de perfil ficarem todas do mesmo tamanho */
+.section img, .container img, .contact img {
+  max-width: 380px !important;
+  width: 90% !important;
   height: auto;
-}
-
-/* Isso organiza as fotos em colunas (quadradinhos) */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.gallery-item {
-  width: 100%;
-  aspect-ratio: 1 / 1; /* Força todas a serem quadradas */
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Corta as sobras sem esticar a imagem */
-}
-
-.gallery-item:hover img {
-  transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
-}
-/* O Segredo para não ficar tudo preto está aqui */
-.lightbox {
-  display: none; /* Só aparece quando o JS manda */
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: rgba(0, 0, 0, 0.95);
-  align-items: center;
-  justify-content: center;
-}
-
-.lightbox.show {
-  display: flex !important;
-}
-
-.lightbox-image {
-  max-width: 90%;
-  max-height: 85vh;
-  object-fit: contain;
-}
-
-.lightbox-image.show {
-  opacity: 1;
-}
-
-.lightbox-nav, .lightbox-close {
-  position: absolute;
-  color: gold;
-  background: none;
-  border: none;
-  font-size: 2.5rem;
-  cursor: pointer;
-  z-index: 10000;
-}
-
-.lightbox-prev { left: 20px; }
-.lightbox-next { right: 20px; }
-.lightbox-close { top: 20px; right: 20px; color: #fff; }
-
-/* ==================== ANIMAÇÕES ==================== */
-/* Removi o !important para o JS conseguir controlar */
-.fade {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  visibility: visible !important;
-}
-
-.fade.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ==================== SEÇÕES & RESPONSIVIDADE ==================== */
-.section { padding: 60px 20px; }
-
-.container {
-  display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .hero-content { flex-direction: column; text-align: center; }
-  .hero { background-attachment: scroll; }
-  .gallery { grid-template-columns: repeat(2, 1fr); }
-}
-/* Garante que nenhuma imagem no site inteiro quebre o layout */
-img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-}
-
-/* Ajuste específico para as fotos das seções não ficarem gigantes */
-.container img {
-  max-width: 400px; /* Limita o tamanho das fotos laterais */
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .container img {
-    max-width: 100%; /* No celular elas ocupam a largura da tela */
-  }
-}
-/* 1. ADICIONE ISSO PARA AS FOTOS DE TEXTO (SOBRE E CONTATO) */
-.container img {
-  max-width: 400px; /* Isso impede que elas fiquem gigantes */
-  width: 100%;
   border-radius: 15px;
+  margin: 20px auto;
   display: block;
-  margin: 0 auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
-/* 2. ADICIONE ISSO PARA A GALERIA FICAR ORGANIZADA */
+/* ==================== 4. GALERIA (MOMENTOS) ==================== */
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
+  /* Cria colunas que cabem no celular sem zoom lateral */
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
   padding: 20px;
 }
 
 .gallery-item {
   width: 100%;
-  aspect-ratio: 1 / 1; 
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-/* 3. CORRIJA O FUNDO (HERO) AQUI */
-.hero {
-  height: 100vh;
-  background: url('../imagens/portfolio.jpeg') center/cover fixed;
-  position: relative;
+.gallery-item:hover img { transform: scale(1.05); }
+
+/* ==================== 5. PADRONIZAÇÃO DOS BOTÕES (LINKS) ==================== */
+.links {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  width: 100%;
+  gap: 10px;
+  padding-bottom: 30px;
 }
-/* --- RECUPERANDO OS BOTÕES --- */
-.btn {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 12px 24px;
+
+/* Força todos os links a terem o mesmo formato de botão */
+.btn, .links a {
+  display: block !important;
+  width: 90% !important;
+  max-width: 320px !important;
+  margin: 8px auto !important;
+  padding: 14px 20px;
   background-color: gold !important;
   color: #000 !important;
   text-decoration: none !important;
   border-radius: 10px;
   font-family: 'Oswald', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
   text-align: center;
-  min-width: 250px; /* Garante um tamanho bom pros botões */
+  transition: 0.3s;
 }
 
-.btn:hover {
-  background-color: #ffd700 !important;
+/* Cor do WhatsApp */
+.btn.whatsapp, .links a[href*="wa.me"] {
+  background-color: #25d366 !important;
+  color: #fff !important;
+}
+
+/* Efeito ao passar o mouse */
+.btn:hover, .links a:hover {
+  filter: brightness(1.1);
   transform: translateY(-2px);
 }
 
-/* --- BOTÕES UM EMBAIXO DO OUTRO --- */
-.links {
-  display: flex;
-  flex-direction: column; /* Força um embaixo do outro */
+/* ==================== 6. LIGHTBOX & ANIMAÇÕES ==================== */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.9);
   align-items: center;
-  gap: 15px;
-  padding: 20px;
+  justify-content: center;
 }
 
-/* --- CORES ESPECÍFICAS --- */
-.btn.whatsapp {
-  background-color: #25d366 !important;
-  color: #fff !important;
+.lightbox.show { display: flex !important; }
+
+.lightbox-image {
+  max-width: 90%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 5px;
 }
 
-.btn.highlight {
-  background-color: #ffb400 !important;
+.fade {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
 }
 
-/* --- AJUSTE DAS IMAGENS QUE ESTAVAM GIGANTES --- */
-.container img {
-  max-width: 400px !important;
+/* ==================== 7. AJUSTES FINAIS MOBILE ==================== */
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
   
-  width: 100%;
-  height: auto;
-  border-radius: 15px;
-  margin: 20px auto;
-  display: block;
-}
-/* --- CORREÇÃO DE ZOOM E LARGURA (MOBILE) --- */
-html, body {
-  max-width: 100%;
-  overflow-x: hidden; /* Proíbe o site de balançar para os lados */
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-/* Garante que o container não estoure a tela do celular */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-  box-sizing: border-box;
-}
-
-/* Ajuste final para os botões no celular */
-.links a {
-  width: 90% !important; /* Quase a largura toda no celular */
-  max-width: 320px;
-}
-
-/* Ajuste para as fotos de 'Sobre' e 'Contato' não ficarem gigantes no celular */
-.container img, .contact img {
-  max-width: 90% !important;
-  height: auto;
-  margin: 0 auto 20px auto;
-}
-
-/* --- AJUSTE DA FOTO DE FUNDO (HERO) --- */
-/* Isso garante que a foto de capa apareça no celular sem dar zoom errado */
-.hero {
-  background-attachment: scroll !important; /* Melhora a performance no celular */
-  background-size: cover;
-  background-position: center center;
-}
-/* --- AJUSTE DA ÚLTIMA FOTO (CONTATO) --- */
-.contact img {
-  max-width: 350px !important; /* Diminui a foto do contato */
-  width: 100%;
-  height: auto;
-  border-radius: 15px;
-  margin: 0 auto 20px auto;
-  display: block;
-}
-
-/* --- PADRONIZAR TODOS OS LINKS COMO BOTÕES --- */
-.links a {
-  display: block !important;
-  width: 100%;
-  max-width: 300px; /* Todos os botões terão o mesmo tamanho máximo */
-  margin: 10px auto !important;
-  padding: 12px 20px;
-  background-color: gold;
-  color: #000 !important;
-  text-decoration: none !important;
-  border-radius: 10px;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-/* Cor específica para o link de WhatsApp que não tem a classe .btn */
-.links a[href*="wa.me"] {
-  background-color: #25d366 !important;
-  color: #fff !important;
-}
-
-/* Remove qualquer estilo de link azul antigo que sobrou */
-.links a:visited, .links a:active {
-  color: #000 !important;
+  .container {
+    flex-direction: column;
+    padding: 0 15px;
+  }
+  
+  h1 { font-size: 2.5rem; }
 }
