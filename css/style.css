@@ -205,29 +205,36 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
     display: none;
   }
 }
-/* --- DESTAQUE DA CHAVE PIX --- */
-.pix {
-    background: rgba(255, 215, 0, 0.1); /* Fundo dourado bem suave */
-    border: 2px dashed gold;            /* Borda tracejada dourada */
-    color: gold;                        /* Texto dourado */
-    padding: 15px;
-    border-radius: 12px;
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    text-align: center;
-    max-width: 300px;
-    margin: 20px auto;                  /* Centraliza na tela */
-    letter-spacing: 1px;
-    display: block;
+/* --- DESTAQUE PADRONIZADO DO PIX --- */
+.pix-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
 }
 
-/* Pequeno texto explicativo opcional em cima do Pix (se quiser adicionar no HTML depois) */
-.pix::before {
-    content: "APOIE O ATLETA";
-    display: block;
-    font-size: 0.7rem;
+.pix-label {
+    font-family: 'Oswald', sans-serif;
     color: #fff;
+    font-size: 0.8rem;
+    text-transform: uppercase;
     margin-bottom: 5px;
-    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+.pix-box {
+    display: block;
+    width: 90%;
+    max-width: 320px; /* Mesma largura dos seus botões */
+    padding: 14px;
+    background: rgba(255, 215, 0, 0.1); /* Fundo escuro com toque dourado */
+    border: 2px solid gold;            /* Borda sólida dourada */
+    color: gold;                       /* Texto dourado */
+    border-radius: 10px;               /* Mesma curvatura dos botões */
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;                 /* Número bem legível */
+    font-weight: 700;
+    text-align: center;
+    box-sizing: border-box;
 }
