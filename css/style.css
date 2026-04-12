@@ -6,6 +6,7 @@ body {
   font-weight: 300;
   line-height: 1.6;
   font-size: 16px;
+  overflow-x: hidden; /* Evita barra de rolagem horizontal indesejada */
 }
 
 h1, h2, h3 {
@@ -35,7 +36,8 @@ h3 {
 
 .hero {
   height: 100vh;
-  background: url('../imagens/portfolio.jpeg') center/cover fixed;
+  /* CORREÇÃO: Removido o ../ para encontrar a imagem na raiz do GitHub */
+  background: url('imagens/portfolio.jpeg') center/cover fixed;
   position: relative;
   display: flex;
   align-items: center;
@@ -100,27 +102,6 @@ p {
   font-family: 'Roboto', sans-serif;
 }
 
-.container div ul {
-  font-weight: 400;
-  padding-left: 1.2rem;
-  margin-top: 1rem;
-  font-family: 'Roboto', sans-serif;
-}
-
-.container div ul li {
-  margin-bottom: 0.5rem;
-  font-weight: 400;
-  line-height: 1.6;
-  font-family: 'Roboto', sans-serif;
-}
-
-li {
-  margin-bottom: 0.5rem;
-  font-weight: 400;
-  line-height: 1.6;
-  font-family: 'Roboto', sans-serif;
-}
-
 .btn {
   display: inline-block;
   margin-top: 20px;
@@ -134,6 +115,8 @@ li {
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -149,56 +132,39 @@ li {
   box-shadow: 0 8px 18px rgba(255, 180, 0, 0.35);
 }
 
-.btn.highlight:hover {
-  background: #ffe066;
-  color: #000;
-}
-
 .btn.whatsapp {
   background: #25d366;
   color: #fff;
   border: 2px solid #25d366;
-  display: inline-block;
-  margin-top: 10px;
 }
 
-.btn.whatsapp:hover {
-  background: #1ebe5d;
-  color: #fff;
+/* ==================== GALERIA & LIGHTBOX ==================== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin: 2rem 0;
 }
 
-.gallery-more {
+.gallery-item {
   position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #111;
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-.gallery-more img {
-  filter: brightness(0.6);
+.gallery-item:hover {
+  transform: translateY(-10px);
 }
 
-.gallery-more-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.75));
-  text-align: center;
-  padding: 1rem;
-  font-family: 'Oswald', sans-serif;
-}
-
-.gallery-more-overlay span {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.3rem;
-}
-
-.gallery-more-overlay p {
-  font-size: 0.9rem;
-  letter-spacing: 1px;
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .lightbox {
@@ -217,244 +183,28 @@ li {
 .lightbox-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-}
-
-.lightbox-content {
-  position: relative;
-  max-width: 95vw;
-  max-height: 95vh;
-  width: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  z-index: 1;
-  padding: 1rem;
-}
-
-.lightbox-image-wrapper {
-  width: auto;
-  max-width: 95vw;
-  max-height: 95vh;
-  overflow: hidden;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #111, #000);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .lightbox-image {
-  width: auto;
-  height: auto;
-  max-width: 95vw;
-  max-height: 95vh;
+  max-width: 90vw;
+  max-height: 80vh;
   object-fit: contain;
-  display: block;
+  position: relative;
+  z-index: 1001;
   opacity: 0;
-  transform: translateX(0);
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition: opacity 0.4s ease;
 }
 
 .lightbox-image.show {
   opacity: 1;
 }
 
-.lightbox-close,
-.lightbox-nav {
-  position: relative;
-  z-index: 2;
-  border: none;
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  width: 44px;
-  height: 44px;
-  font-size: 1.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.lightbox-close:hover,
-.lightbox-nav:hover {
-  background: rgba(255, 255, 255, 0.22);
-}
-
-.lightbox-prev,
-.lightbox-next {
-  flex-shrink: 0;
-}
-
-.lightbox-counter {
-  position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #fff;
-  font-family: 'Oswald', sans-serif;
-  letter-spacing: 1px;
-  z-index: 2;
-}
-
-.lightbox-image.slide-right {
-  transform: translateX(30px);
-  opacity: 0;
-}
-
-.lightbox-image.slide-left {
-  transform: translateX(-30px);
-  opacity: 0;
-}
-
-.section {
-  padding: clamp(40px, 8vw, 60px) clamp(15px, 4vw, 20px);
-}
-
-.dark {
-  background: linear-gradient(to bottom, #111, #000);
-}
-
-.container {
-  display: flex;
-  gap: clamp(20px, 5vw, 30px);
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-}
-
-.container.column {
-  flex-direction: column;
-  text-align: center;
-}
-
-.container div p {
-  font-weight: 400;
-  line-height: 1.6;
-  margin-bottom: 0.8rem;
-  font-family: 'Roboto', sans-serif;
-}
-
-.container.column p {
-  font-weight: 400;
-  line-height: 1.7;
-  margin-bottom: 1.2rem;
-  text-align: left;
-  font-family: 'Roboto', sans-serif;
-}
-
-img {
-  width: clamp(250px, 80vw, 300px);
-  max-width: 100%;
-  height: auto;
-  border-radius: 20px;
-}
-
-.contact {
-  text-align: center;
-  padding: clamp(40px, 8vw, 60px) clamp(15px, 4vw, 20px);
-}
-
-.contact p {
-  font-weight: 400;
-  margin-bottom: 1rem;
-  line-height: 1.6;
-  font-family: 'Roboto', sans-serif;
-}
-
-.links a {
-  display: block;
-  margin: 10px;
-  color: gold;
-  text-decoration: none;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: color 0.3s ease;
-}
-
-.links a:hover {
-  color: #ffd700;
-}
-
-.hashtags {
-  font-size: 0.9em;
-  color: #ccc;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 1.5rem;
-}
-
-.container.column ul {
-  font-weight: 400;
-  padding-left: 1.2rem;
-  margin-bottom: 1.5rem;
-  text-align: left;
-  font-family: 'Roboto', sans-serif;
-}
-
-.container.column ul li {
-  margin-bottom: 0.5rem;
-  font-weight: 400;
-  line-height: 1.6;
-  text-align: left;
-  font-family: 'Roboto', sans-serif;
-}
-
-/* ==================== GALERIA ==================== */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  width: 100%;
-  margin: 2rem 0;
-}
-
-.gallery-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #222, #111);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
-}
-
-.gallery-item:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-}
-
-.gallery-item img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-}
-
-.gallery-item:hover img {
-  transform: scale(1.03);
-}
-
-.gallery-item:not(:has(img[src])) {
-  border: 2px dashed gold;
-  color: #999;
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 20px;
-}
-
-/* animações */
+/* ==================== ANIMAÇÕES (CORREÇÃO) ==================== */
 .fade {
-  opacity: 1;
-  transform: translateY(50px);
-  transition: all 0.8s ease;
+  opacity: 0; /* IMPORTANTE: Começa em 0 para o JS revelar */
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .fade.show {
@@ -462,7 +212,46 @@ img {
   transform: translateY(0);
 }
 
-/* ==================== RESPONSIVIDADE ==================== */
+/* ==================== SEÇÕES ==================== */
+.section {
+  padding: clamp(40px, 8vw, 60px) clamp(15px, 4vw, 20px);
+  position: relative;
+}
+
+.dark {
+  background: #0a0a0a;
+}
+
+.container {
+  display: flex;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.container.column {
+  flex-direction: column;
+  text-align: center;
+}
+
+.contact {
+  text-align: center;
+  padding: 60px 20px;
+  background: #000;
+}
+
+.links a {
+  display: inline-block;
+  margin: 10px;
+  color: gold;
+  text-decoration: none;
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+}
+
+/* ==================== RESPONSIVIDADE (FINAL) ==================== */
 
 /* Tablets */
 @media (max-width: 768px) {
@@ -477,6 +266,7 @@ img {
   
   .hero {
     height: 80vh;
+    background-attachment: scroll; /* Melhora a performance em dispositivos móveis */
   }
   
   .hero-content {
@@ -516,7 +306,6 @@ img {
   }
   
   .hero {
-    background-attachment: scroll;
     height: 70vh;
   }
   
