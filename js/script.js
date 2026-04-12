@@ -174,3 +174,29 @@ if (galleryContainer && window.innerWidth <= 768) {
     galleryContainer.scrollLeft = scrollLeft - walk;
   });
 }
+// === FUNÇÃO DE ARRASTAR (SWIPE) NO LIGHTBOX ===
+let touchstartX = 0;
+let touchendX = 0;
+
+const lbContainer = document.getElementById('lightbox');
+
+lbContainer.addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX;
+}, false);
+
+lbContainer.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX;
+    handleLightboxSwipe();
+}, false);
+
+function handleLightboxSwipe() {
+    const threshold = 50; // Sensibilidade do arrasto
+    if (touchendX < touchstartX - threshold) {
+        // Deslizou para a esquerda -> Próxima foto
+        document.querySelector('.lightbox-next').click();
+    }
+    if (touchendX > touchstartX + threshold) {
+        // Deslizou para a direita -> Foto anterior
+        document.querySelector('.lightbox-prev').click();
+    }
+}
