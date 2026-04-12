@@ -23,7 +23,7 @@ h1, h2, h3 {
 
 h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
 
-/* ==================== 2. HERO SECTION (REVISADA) ==================== */
+/* ==================== 2. HERO SECTION ==================== */
 .hero {
   height: 100vh;
   background: url('../imagens/portfolio.jpeg') center/cover no-repeat !important;
@@ -53,17 +53,16 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
   gap: 2rem;
 }
 
-/* --- TRAVA DO VÍDEO --- */
 .hero-video {
   flex: 1;
   display: flex;
   justify-content: center;
-  max-width: 350px; /* Limita o espaço do vídeo no PC */
+  max-width: 350px;
 }
 
 .hero-video video {
   width: 100%;
-  max-width: 250px; /* Tamanho controlado do vídeo */
+  max-width: 250px;
   height: auto;
   border-radius: 20px;
   border: 2px solid gold;
@@ -71,18 +70,11 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
 }
 
 @media (max-width: 768px) {
-  .hero { background-attachment: scroll !important; }
-  
   .hero-content {
-    flex-direction: column; /* Texto em cima, vídeo embaixo no celular */
+    flex-direction: column;
     text-align: center;
-    justify-content: center;
   }
-
-  .hero-video video {
-    max-width: 180px; /* Vídeo menor no celular para não sumir com o texto */
-    margin-top: 10px;
-  }
+  .hero-video video { max-width: 180px; margin-top: 10px; }
 }
 
 /* ==================== 3. GALERIA (PC E MOBILE) ==================== */
@@ -115,15 +107,10 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
     display: flex !important;
     overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch;
     gap: 12px;
     padding: 20px 15px;
   }
-
-  .gallery-item {
-    flex: 0 0 85% !important;
-    scroll-snap-align: center;
-  }
+  .gallery-item { flex: 0 0 85% !important; scroll-snap-align: center; }
   .gallery::-webkit-scrollbar { display: none; }
 }
 
@@ -135,14 +122,6 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
   border-radius: 15px;
   margin: 20px auto;
   display: block;
-}
-
-.links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 30px;
 }
 
 .btn, .links a {
@@ -161,18 +140,7 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
   text-decoration: none !important;
 }
 
-.btn.whatsapp, .links a[href*="wa.me"] {
-  background-color: #25d366 !important;
-  color: #fff !important;
-}
-
-/* --- DESTAQUE PIX --- */
-.pix-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
+.btn.whatsapp, .links a[href*="wa.me"] { background-color: #25d366 !important; color: #fff !important; }
 
 .pix-box {
     width: 90%;
@@ -186,38 +154,94 @@ h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
     font-size: 1.3rem;
     font-weight: 700;
     text-align: center;
+    margin: 0 auto;
 }
 
-/* ==================== 5. LIGHTBOX ==================== */
+/* ==================== 5. LIGHTBOX (ESTILO INSTAGRAM) ==================== */
 .lightbox {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.98);
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  touch-action: none;
 }
 
 .lightbox.show { display: flex !important; }
 
-.lightbox-image {
-  max-width: 90%;
-  max-height: 80vh;
-  object-fit: contain;
+/* Trilho para as fotos deslizarem lado a lado */
+.lightbox-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
 }
 
+.lightbox-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lightbox-slide img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* NOVO BOTÃO DE FECHAR CIRCULAR DOURADO */
+.lightbox-close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 42px;
+  height: 42px;
+  background: gold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10005;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.lightbox-close::before, .lightbox-close::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 3px;
+  background: #000;
+  border-radius: 2px;
+}
+.lightbox-close::before { transform: rotate(45deg); }
+.lightbox-close::after { transform: rotate(-45deg); }
+
+/* Setas apenas para PC */
 .lightbox-prev, .lightbox-next {
   position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   color: gold;
-  font-size: 3rem;
+  font-size: 3.5rem;
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 10006;
+  padding: 20px;
 }
 
-.lightbox-prev { left: 20px; }
-.lightbox-next { right: 20px; }
+.lightbox-prev { left: 10px; }
+.lightbox-next { right: 10px; }
 
 @media (max-width: 768px) {
   .lightbox-prev, .lightbox-next { display: none !important; }
