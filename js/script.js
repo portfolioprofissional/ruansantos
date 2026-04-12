@@ -146,3 +146,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.key === 'ArrowLeft') updateLightbox(currentIndex - 1, 'prev');
     });
 });
+/* ==================== ATIVAR ARRASTE (SWIPE) NA GALERIA MOBILE ==================== */
+const galleryContainer = document.querySelector('.gallery');
+
+if (galleryContainer && window.innerWidth <= 768) {
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  // Quando o usuário toca na tela
+  galleryContainer.addEventListener('touchstart', (e) => {
+    isDown = true;
+    startX = e.touches[0].pageX - galleryContainer.offsetLeft;
+    scrollLeft = galleryContainer.scrollLeft;
+  });
+
+  // Quando o usuário para de tocar
+  galleryContainer.addEventListener('touchend', () => {
+    isDown = false;
+  });
+
+  // Quando o usuário move o dedo (arrasta)
+  galleryContainer.addEventListener('touchmove', (e) => {
+    if (!isDown) return; // Se não estiver tocando, não faz nada
+    const x = e.touches[0].pageX - galleryContainer.offsetLeft;
+    const walk = (x - startX) * 2; // Multiplicador de velocidade do arraste
+    galleryContainer.scrollLeft = scrollLeft - walk;
+  });
+}
