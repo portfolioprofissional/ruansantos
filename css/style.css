@@ -156,9 +156,10 @@ h2 {
 /* ==================== ANIMAÇÕES ==================== */
 /* Removi o !important para o JS conseguir controlar */
 .fade {
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 1 !important;
+  transform: none !important;
   transition: opacity 0.8s ease, transform 0.8s ease;
+  visibility: visible !important;
 }
 
 .fade.show {
