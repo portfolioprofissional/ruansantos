@@ -201,15 +201,24 @@ p {
 }
 
 /* ==================== ANIMAÇÕES (CORREÇÃO) ==================== */
+/* Isso garante que, se o JS falhar, o conteúdo ainda apareça */
 .fade {
-  opacity: 0; /* IMPORTANTE: Começa em 0 para o JS revelar */
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  opacity: 1 !important; /* Força a visibilidade para teste */
+  transform: translateY(0) !important; 
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.fade.show {
-  opacity: 1;
-  transform: translateY(0);
+/* Garante que o lightbox não cubra a tela se não estiver ativo */
+.lightbox {
+  display: none; 
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.lightbox.show {
+  display: flex !important;
 }
 
 /* ==================== SEÇÕES ==================== */
