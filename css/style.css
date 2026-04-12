@@ -1,3 +1,4 @@
+/* ==================== CONFIGURAÇÕES GERAIS ==================== */
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -6,7 +7,7 @@ body {
   font-weight: 300;
   line-height: 1.6;
   font-size: 16px;
-  overflow-x: hidden; /* Evita barra de rolagem horizontal indesejada */
+  overflow-x: hidden;
 }
 
 h1, h2, h3 {
@@ -28,15 +29,9 @@ h2 {
   margin-bottom: 1rem;
 }
 
-h3 {
-  font-size: clamp(1.2rem, 4vw, 1.8rem);
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-
+/* ==================== HERO SECTION ==================== */
 .hero {
   height: 100vh;
-  /* CORREÇÃO: Removido o ../ para encontrar a imagem na raiz do GitHub */
   background: url('imagens/portfolio.jpeg') center/cover fixed;
   position: relative;
   display: flex;
@@ -45,8 +40,7 @@ h3 {
 
 .overlay {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(to bottom, rgba(0,0,0,0.7), #000);
   z-index: 1;
 }
@@ -64,48 +58,18 @@ h3 {
   gap: 2rem;
 }
 
-.content {
-  flex: 1;
-  max-width: 500px;
-}
-
-.hero-video {
-  flex: 1;
-  max-width: 250px;
-  display: flex;
-  justify-content: center;
-}
-
 .hero-video video {
   width: 100%;
-  height: auto;
-  aspect-ratio: 9 / 16;
-  object-fit: cover;
-  object-position: center;
+  max-width: 250px;
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
-  display: block;
 }
 
-.content p {
-  font-size: clamp(1rem, 3.5vw, 1.4rem);
-  font-weight: 300;
-  margin: 1rem 0;
-  letter-spacing: 0.5px;
-  font-family: 'Oswald', sans-serif;
-}
-
-p {
-  font-weight: 400;
-  margin-bottom: 1rem;
-  line-height: 1.7;
-  font-family: 'Roboto', sans-serif;
-}
-
+/* ==================== COMPONENTES ==================== */
 .btn {
   display: inline-block;
   margin-top: 20px;
-  padding: clamp(10px, 2.5vw, 12px) clamp(20px, 5vw, 24px);
+  padding: 12px 24px;
   background: gold;
   color: #000;
   text-decoration: none;
@@ -113,7 +77,6 @@ p {
   font-family: 'Oswald', sans-serif;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
@@ -122,20 +85,6 @@ p {
 .btn:hover {
   background: #ffd700;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
-}
-
-.btn.highlight {
-  background: #ffb400;
-  color: #000;
-  border: 2px solid #fff;
-  box-shadow: 0 8px 18px rgba(255, 180, 0, 0.35);
-}
-
-.btn.whatsapp {
-  background: #25d366;
-  color: #fff;
-  border: 2px solid #25d366;
 }
 
 /* ==================== GALERIA & LIGHTBOX ==================== */
@@ -143,7 +92,6 @@ p {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  width: 100%;
   margin: 2rem 0;
 }
 
@@ -151,47 +99,38 @@ p {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  background: #111;
   cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.gallery-item:hover {
-  transform: translateY(-10px);
 }
 
 .gallery-item img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
   display: block;
+  transition: transform 0.3s ease;
 }
 
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* O Segredo para não ficar tudo preto está aqui */
 .lightbox {
   position: fixed;
   inset: 0;
-  display: none;
+  display: none; /* Começa totalmente removido */
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  background: rgba(0, 0, 0, 0.95);
 }
 
 .lightbox.show {
-  display: flex;
-}
-
-.lightbox-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.9);
+  display: flex; /* O JS ativa apenas quando necessário */
 }
 
 .lightbox-image {
   max-width: 90vw;
   max-height: 80vh;
   object-fit: contain;
-  position: relative;
-  z-index: 1001;
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -200,187 +139,46 @@ p {
   opacity: 1;
 }
 
-/* ==================== ANIMAÇÕES (CORREÇÃO) ==================== */
-/* Isso garante que, se o JS falhar, o conteúdo ainda apareça */
+.lightbox-nav, .lightbox-close {
+  position: absolute;
+  color: gold;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+.lightbox-close { top: 20px; right: 20px; color: #fff; }
+
+/* ==================== ANIMAÇÕES ==================== */
+/* Removi o !important para o JS conseguir controlar */
 .fade {
-  opacity: 1 !important; /* Força a visibilidade para teste */
-  transform: translateY(0) !important; 
+  opacity: 0;
+  transform: translateY(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-/* Garante que o lightbox não cubra a tela se não estiver ativo */
-.lightbox {
-  display: none; 
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.95);
+.fade.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.lightbox.show {
-  display: flex !important;
-}
-
-/* ==================== SEÇÕES ==================== */
-.section {
-  padding: clamp(40px, 8vw, 60px) clamp(15px, 4vw, 20px);
-  position: relative;
-}
-
-.dark {
-  background: #0a0a0a;
-}
+/* ==================== SEÇÕES & RESPONSIVIDADE ==================== */
+.section { padding: 60px 20px; }
 
 .container {
   display: flex;
-  gap: 30px;
   max-width: 1200px;
   margin: 0 auto;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.container.column {
-  flex-direction: column;
-  text-align: center;
-}
-
-.contact {
-  text-align: center;
-  padding: 60px 20px;
-  background: #000;
-}
-
-.links a {
-  display: inline-block;
-  margin: 10px;
-  color: gold;
-  text-decoration: none;
-  font-family: 'Oswald', sans-serif;
-  text-transform: uppercase;
-}
-
-/* ==================== RESPONSIVIDADE (FINAL) ==================== */
-
-/* Tablets */
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .container.column {
-    flex-direction: column;
-  }
-  
-  .hero {
-    height: 80vh;
-    background-attachment: scroll; /* Melhora a performance em dispositivos móveis */
-  }
-  
-  .hero-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
-  }
-  
-  .content {
-    padding: 0 20px;
-    max-width: none;
-  }
-  
-  .hero-video {
-    max-width: 200px;
-  }
-  
-  .hero-video video {
-    max-height: 350px;
-  }
-  
-  .links a {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  
-  .gallery {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-  }
-}
-
-/* Celulares */
-@media (max-width: 480px) {
-  body {
-    font-size: 14px;
-  }
-  
-  .hero {
-    height: 70vh;
-  }
-  
-  .hero-content {
-    padding: 0 15px;
-  }
-  
-  .hero-video {
-    max-width: 150px;
-  }
-  
-  .hero-video video {
-    max-height: 250px;
-  }
-  
-  h1 {
-    font-size: 2.5rem;
-  }
-  
-  h2 {
-    font-size: 1.8rem;
-  }
-  
-  h3 {
-    font-size: 1.5rem;
-  }
-  
-  .content p {
-    font-size: 1.1rem;
-  }
-  
-  .section {
-    padding: 30px 15px;
-  }
-  
-  .contact {
-    padding: 30px 15px;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
-  
-  img {
-    width: 100%;
-    max-width: 280px;
-  }
-  
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .links a {
-    margin: 5px 10px;
-    font-size: 0.9rem;
-  }
-  
-  .gallery {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  
-  .gallery-item {
-    border-radius: 8px;
-  }
+  .hero-content { flex-direction: column; text-align: center; }
+  .hero { background-attachment: scroll; }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
 }
