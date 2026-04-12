@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // animação ao rolar
+    // --- 1. ANIMAÇÃO AO ROLAR (FADE IN) ---
     const faders = document.querySelectorAll('.fade');
-
-    const appearOptions = {
-        threshold: 0.2
-    };
+    const appearOptions = { threshold: 0.2 };
 
     const appearOnScroll = new IntersectionObserver(function(entries, observer) {
         entries.forEach(entry => {
@@ -14,11 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, appearOptions);
 
-    faders.forEach(fader => {
-        appearOnScroll.observe(fader);
-    });
+    faders.forEach(fader => appearOnScroll.observe(fader));
 
-    // efeito parallax mais suave (apenas em desktop)
+    // --- 2. EFEITO PARALLAX SUAVE (APENAS DESKTOP) ---
     if (window.innerWidth > 768) {
         window.addEventListener('scroll', () => {
             const hero = document.querySelector('.hero');
@@ -29,25 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // scroll suave
+    // --- 3. SCROLL SUAVE DOS LINKS ---
     const links = document.querySelectorAll('a[href^="#"]');
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
-            
             if (targetElement) {
                 e.preventDefault();
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
+                targetElement.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
 
-    // galeria lightbox
-    const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
-
+    // --- 4. CONFIGURAÇÃO DA GALERIA & LIGHTBOX ---
     const galleryImages = [
         { src: 'imagens/Galeria1.jpeg', alt: 'Momento de vitória' },
         { src: 'imagens/Galeria2.jpeg', alt: 'Atleta no pódio' },
@@ -56,32 +46,31 @@ document.addEventListener('DOMContentLoaded', () => {
         { src: 'imagens/Galeria5.jpeg', alt: 'Equipe e campeão' },
         { src: 'imagens/Galeria6.jpeg', alt: 'Selfie com medalha' },
         { src: 'imagens/Galeria7.jpeg', alt: 'Entrevista pós-campeonato' },
-        { src: 'imagens/Galeria9.jpeg', alt: 'Momento de disputa em campeonato' },
-        { src: 'imagens/Galeria10.jpeg', alt: 'Pódio de campeonato' },
+        { src: 'imagens/Galeria9.jpeg', alt: 'Momento de disputa' },
+        { src: 'imagens/Galeria10.jpeg', alt: 'Pódio' },
         { src: 'imagens/Galeria11.jpeg', alt: 'Atleta com troféu' },
-        { src: 'imagens/Galeria12.jpeg', alt: 'Foto de campeonato oficial' },
-        { src: 'imagens/Galeria13.jpeg', alt: 'Foto adicional 1' },
-        { src: 'imagens/Galeria14.jpeg', alt: 'Foto adicional 2' },
-        { src: 'imagens/Galeria16.jpeg', alt: 'Foto adicional 4' },
-        { src: 'imagens/Galeria17.jpeg', alt: 'Foto adicional 5' },
-        { src: 'imagens/Galeria18.jpeg', alt: 'Foto adicional 6' },
-        { src: 'imagens/Galeria19.jpeg', alt: 'Foto adicional 7' },
-        { src: 'imagens/Galeria20.jpeg', alt: 'Foto adicional 8' },
-        { src: 'imagens/Galeria21.jpeg', alt: 'Foto adicional 9' },
-        { src: 'imagens/Galeria22.jpeg', alt: 'Foto adicional 10' },
-        { src: 'imagens/Galeria23.jpeg', alt: 'Foto adicional 11' }
+        { src: 'imagens/Galeria12.jpeg', alt: 'Foto campeonato' },
+        { src: 'imagens/Galeria13.jpeg', alt: 'Adicional 1' },
+        { src: 'imagens/Galeria14.jpeg', alt: 'Adicional 2' },
+        { src: 'imagens/Galeria16.jpeg', alt: 'Adicional 4' },
+        { src: 'imagens/Galeria17.jpeg', alt: 'Adicional 5' },
+        { src: 'imagens/Galeria18.jpeg', alt: 'Adicional 6' },
+        { src: 'imagens/Galeria19.jpeg', alt: 'Adicional 7' },
+        { src: 'imagens/Galeria20.jpeg', alt: 'Adicional 8' },
+        { src: 'imagens/Galeria21.jpeg', alt: 'Adicional 9' },
+        { src: 'imagens/Galeria22.jpeg', alt: 'Adicional 10' },
+        { src: 'imagens/Galeria23.jpeg', alt: 'Adicional 11' }
     ];
 
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.querySelector('.lightbox-image');
     const lightboxCounter = document.querySelector('.lightbox-counter');
-    const closeButton = document.querySelector('.lightbox-close');
-    const prevButton = document.querySelector('.lightbox-prev');
-    const nextButton = document.querySelector('.lightbox-next');
+    const currentIndexLabel = document.querySelector('.lightbox-counter');
+    
     let currentIndex = 0;
     let isAnimating = false;
 
-    const updateLightbox = (index, direction) => {
+    const updateLightbox = (index) => {
         if (isAnimating || !lightboxImage) return;
         isAnimating = true;
 
@@ -100,103 +89,60 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             lightboxImage.classList.add('show');
             
-            setTimeout(() => {
-                isAnimating = false;
-            }, 400);
+            setTimeout(() => { isAnimating = false; }, 400);
         }, 200);
     };
 
-    const openLightbox = (index) => {
-        if (lightbox) {
-            lightbox.classList.add('show');
-            updateLightbox(index);
-        }
-    };
-
-    const closeLightbox = () => {
-        if (lightbox) lightbox.classList.remove('show');
-    };
-
-    galleryItems.forEach(item => {
+    // Abrir ao clicar nos itens da galeria
+    document.querySelectorAll('.gallery-item').forEach((item, index) => {
         item.addEventListener('click', () => {
-            const index = Number(item.dataset.index);
-            if (!isNaN(index)) {
-                openLightbox(index);
+            currentIndex = index;
+            if (lightbox) {
+                lightbox.classList.add('show');
+                updateLightbox(currentIndex);
             }
         });
     });
 
-    if (closeButton) closeButton.addEventListener('click', closeLightbox);
-
-    if (lightbox) {
-        lightbox.addEventListener('click', (event) => {
-            if (event.target.classList.contains('lightbox-backdrop')) {
-                closeLightbox();
-            }
-        });
-    }
-
-    if (nextButton) nextButton.addEventListener('click', (e) => { e.stopPropagation(); updateLightbox(currentIndex + 1, 'next'); });
-    if (prevButton) prevButton.addEventListener('click', (e) => { e.stopPropagation(); updateLightbox(currentIndex - 1, 'prev'); });
-
-    window.addEventListener('keydown', (event) => {
-        if (!lightbox || !lightbox.classList.contains('show')) return;
-        if (event.key === 'Escape') closeLightbox();
-        if (event.key === 'ArrowRight') updateLightbox(currentIndex + 1, 'next');
-        if (event.key === 'ArrowLeft') updateLightbox(currentIndex - 1, 'prev');
+    // Fechar Lightbox
+    const closeLightbox = () => { if (lightbox) lightbox.classList.remove('show'); };
+    
+    document.querySelector('.lightbox-close')?.addEventListener('click', closeLightbox);
+    
+    lightbox?.addEventListener('click', (e) => {
+        if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
+            closeLightbox();
+        }
     });
+
+    // Navegação via botões
+    document.querySelector('.lightbox-next')?.addEventListener('click', (e) => { 
+        e.stopPropagation(); updateLightbox(currentIndex + 1); 
+    });
+    document.querySelector('.lightbox-prev')?.addEventListener('click', (e) => { 
+        e.stopPropagation(); updateLightbox(currentIndex - 1); 
+    });
+
+    // Teclado
+    window.addEventListener('keydown', (e) => {
+        if (!lightbox?.classList.contains('show')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') updateLightbox(currentIndex + 1);
+        if (e.key === 'ArrowLeft') updateLightbox(currentIndex - 1);
+    });
+
+    // --- 5. SWIPE (ARRASAR) NO LIGHTBOX ---
+    let touchstartX = 0;
+    let touchendX = 0;
+
+    lightbox?.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+
+    lightbox?.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        const threshold = 50;
+        if (touchendX < touchstartX - threshold) updateLightbox(currentIndex + 1); // Swipe esquerda
+        if (touchendX > touchstartX + threshold) updateLightbox(currentIndex - 1); // Swipe direita
+    }, {passive: true});
 });
-/* ==================== ATIVAR ARRASTE (SWIPE) NA GALERIA MOBILE ==================== */
-const galleryContainer = document.querySelector('.gallery');
-
-if (galleryContainer && window.innerWidth <= 768) {
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-
-  // Quando o usuário toca na tela
-  galleryContainer.addEventListener('touchstart', (e) => {
-    isDown = true;
-    startX = e.touches[0].pageX - galleryContainer.offsetLeft;
-    scrollLeft = galleryContainer.scrollLeft;
-  });
-
-  // Quando o usuário para de tocar
-  galleryContainer.addEventListener('touchend', () => {
-    isDown = false;
-  });
-
-  // Quando o usuário move o dedo (arrasta)
-  galleryContainer.addEventListener('touchmove', (e) => {
-    if (!isDown) return; // Se não estiver tocando, não faz nada
-    const x = e.touches[0].pageX - galleryContainer.offsetLeft;
-    const walk = (x - startX) * 2; // Multiplicador de velocidade do arraste
-    galleryContainer.scrollLeft = scrollLeft - walk;
-  });
-}
-// === FUNÇÃO DE ARRASTAR (SWIPE) NO LIGHTBOX ===
-let touchstartX = 0;
-let touchendX = 0;
-
-const lbContainer = document.getElementById('lightbox');
-
-lbContainer.addEventListener('touchstart', e => {
-    touchstartX = e.changedTouches[0].screenX;
-}, false);
-
-lbContainer.addEventListener('touchend', e => {
-    touchendX = e.changedTouches[0].screenX;
-    handleLightboxSwipe();
-}, false);
-
-function handleLightboxSwipe() {
-    const threshold = 50; // Sensibilidade do arrasto
-    if (touchendX < touchstartX - threshold) {
-        // Deslizou para a esquerda -> Próxima foto
-        document.querySelector('.lightbox-next').click();
-    }
-    if (touchendX > touchstartX + threshold) {
-        // Deslizou para a direita -> Foto anterior
-        document.querySelector('.lightbox-prev').click();
-    }
-}
