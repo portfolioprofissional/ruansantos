@@ -25,8 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 3. SCROLL SUAVE DOS LINKS ---
-    const links = document.querySelectorAll('a[href^="#"]');
-    links.forEach(link => {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
         link.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
@@ -37,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 4. CONFIGURAÇÃO DA GALERIA & LIGHTBOX ---
+    // --- 4. CONFIGURAÇÃO DA GALERIA ESTILO INSTAGRAM ---
     const galleryImages = [
         { src: 'imagens/Galeria1.jpeg', alt: 'Momento de vitória' },
         { src: 'imagens/Galeria2.jpeg', alt: 'Atleta no pódio' },
@@ -63,86 +62,109 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const lightbox = document.getElementById('lightbox');
-    const lightboxImage = document.querySelector('.lightbox-image');
-    const lightboxCounter = document.querySelector('.lightbox-counter');
-    const currentIndexLabel = document.querySelector('.lightbox-counter');
-    
+    const slider = document.querySelector('.lightbox-slider');
+    const counter = document.querySelector('.lightbox-counter');
     let currentIndex = 0;
-    let isAnimating = false;
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID = 0;
 
-    const updateLightbox = (index) => {
-        if (isAnimating || !lightboxImage) return;
-        isAnimating = true;
+    // Criar os slides dinamicamente para o trilho
+    const createSlides = () => {
+        slider.innerHTML = ''; // Limpa o slider
+        galleryImages.forEach(img => {
+            const slide = document.createElement('div');
+            slide.classList.add('lightbox-slide');
+            slide.innerHTML = `<img src="${img.src}" alt="${img.alt}">`;
+            slider.appendChild(slide);
+        });
+    };
+    createSlides();
 
-        lightboxImage.classList.remove('show');
-        
-        setTimeout(() => {
-            currentIndex = (index + galleryImages.length) % galleryImages.length;
-            const data = galleryImages[currentIndex];
-            
-            if (data) {
-                lightboxImage.src = data.src;
-                lightboxImage.alt = data.alt;
-                if (lightboxCounter) {
-                    lightboxCounter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
-                }
-            }
-            lightboxImage.classList.add('show');
-            
-            setTimeout(() => { isAnimating = false; }, 400);
-        }, 200);
+    const updateSlider = () => {
+        currentTranslate = currentIndex * -window.innerWidth;
+        prevTranslate = currentTranslate;
+        slider.style.transform = `translateX(${currentTranslate}px)`;
+        if (counter) counter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
     };
 
-    // Abrir ao clicar nos itens da galeria
+    // Abrir Lightbox
     document.querySelectorAll('.gallery-item').forEach((item, index) => {
         item.addEventListener('click', () => {
             currentIndex = index;
-            if (lightbox) {
-                lightbox.classList.add('show');
-                updateLightbox(currentIndex);
-            }
+            lightbox.classList.add('show');
+            slider.style.transition = 'none'; // Sem transição ao abrir
+            updateSlider();
+            setTimeout(() => { slider.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; }, 10);
         });
     });
 
     // Fechar Lightbox
-    const closeLightbox = () => { if (lightbox) lightbox.classList.remove('show'); };
-    
+    const closeLightbox = () => lightbox.classList.remove('show');
     document.querySelector('.lightbox-close')?.addEventListener('click', closeLightbox);
-    
-    lightbox?.addEventListener('click', (e) => {
-        if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
-            closeLightbox();
-        }
+    lightbox.addEventListener('click', (e) => {
+        if (e.target.classList.contains('lightbox-slide') || e.target.id === 'lightbox') closeLightbox();
     });
 
-    // Navegação via botões
-    document.querySelector('.lightbox-next')?.addEventListener('click', (e) => { 
-        e.stopPropagation(); updateLightbox(currentIndex + 1); 
+    // Navegação via Botões e Teclado
+    document.querySelector('.lightbox-next')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentIndex < galleryImages.length - 1) { currentIndex++; updateSlider(); }
     });
-    document.querySelector('.lightbox-prev')?.addEventListener('click', (e) => { 
-        e.stopPropagation(); updateLightbox(currentIndex - 1); 
+    document.querySelector('.lightbox-prev')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentIndex > 0) { currentIndex--; updateSlider(); }
     });
 
-    // Teclado
     window.addEventListener('keydown', (e) => {
-        if (!lightbox?.classList.contains('show')) return;
+        if (!lightbox.classList.contains('show')) return;
         if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight') updateLightbox(currentIndex + 1);
-        if (e.key === 'ArrowLeft') updateLightbox(currentIndex - 1);
+        if (e.key === 'ArrowRight' && currentIndex < galleryImages.length - 1) { currentIndex++; updateSlider(); }
+        if (e.key === 'ArrowLeft' && currentIndex > 0) { currentIndex--; updateSlider(); }
     });
 
-    // --- 5. SWIPE (ARRASAR) NO LIGHTBOX ---
-    let touchstartX = 0;
-    let touchendX = 0;
+    // --- 5. LÓGICA DE ARRASTE (SWIPE) IGUAL AO INSTAGRAM ---
+    slider.addEventListener('touchstart', touchStart);
+    slider.addEventListener('touchend', touchEnd);
+    slider.addEventListener('touchmove', touchMove);
 
-    lightbox?.addEventListener('touchstart', e => {
-        touchstartX = e.changedTouches[0].screenX;
-    }, {passive: true});
+    function touchStart(e) {
+        startPos = e.touches[0].clientX;
+        isDragging = true;
+        animationID = requestAnimationFrame(animation);
+        slider.style.transition = 'none'; // Segue o dedo em tempo real
+    }
 
-    lightbox?.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        const threshold = 50;
-        if (touchendX < touchstartX - threshold) updateLightbox(currentIndex + 1); // Swipe esquerda
-        if (touchendX > touchstartX + threshold) updateLightbox(currentIndex - 1); // Swipe direita
-    }, {passive: true});
+    function touchMove(e) {
+        if (isDragging) {
+            const currentPosition = e.touches[0].clientX;
+            currentTranslate = prevTranslate + currentPosition - startPos;
+        }
+    }
+
+    function touchEnd() {
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        slider.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+
+        const movedBy = currentTranslate - prevTranslate;
+
+        // Se arrastar mais que 100px, muda de foto
+        if (movedBy < -100 && currentIndex < galleryImages.length - 1) currentIndex += 1;
+        if (movedBy > 100 && currentIndex > 0) currentIndex -= 1;
+
+        updateSlider();
+    }
+
+    function animation() {
+        if (isDragging) {
+            slider.style.transform = `translateX(${currentTranslate}px)`;
+            requestAnimationFrame(animation);
+        }
+    }
+    
+    // Ajustar slider caso a tela mude de tamanho (rotação do celular)
+    window.addEventListener('resize', updateSlider);
 });
