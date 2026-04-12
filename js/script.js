@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 4. CONFIGURAÇÃO DA GALERIA ESTILO INSTAGRAM ---
+    // --- 4. CONFIGURAÇÃO DA GALERIA ---
     const galleryImages = [
         { src: 'imagens/Galeria1.jpeg', alt: 'Momento de vitória' },
         { src: 'imagens/Galeria2.jpeg', alt: 'Atleta no pódio' },
@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const lightbox = document.getElementById('lightbox');
     const slider = document.querySelector('.lightbox-slider');
-    const counter = document.querySelector('.lightbox-counter');
     let currentIndex = 0;
     let isDragging = false;
     let startPos = 0;
@@ -71,9 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let prevTranslate = 0;
     let animationID = 0;
 
-    // Criar os slides dinamicamente para o trilho
+    // Criar os slides dinamicamente
     const createSlides = () => {
-        slider.innerHTML = ''; // Limpa o slider
+        slider.innerHTML = '';
         galleryImages.forEach(img => {
             const slide = document.createElement('div');
             slide.classList.add('lightbox-slide');
@@ -87,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTranslate = currentIndex * -window.innerWidth;
         prevTranslate = currentTranslate;
         slider.style.transform = `translateX(${currentTranslate}px)`;
-        if (counter) counter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
     };
 
     // Abrir Lightbox
@@ -95,20 +93,24 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', () => {
             currentIndex = index;
             lightbox.classList.add('show');
-            slider.style.transition = 'none'; // Sem transição ao abrir
+            slider.style.transition = 'none';
             updateSlider();
-            setTimeout(() => { slider.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; }, 10);
+            setTimeout(() => { 
+                slider.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)'; 
+            }, 10);
         });
     });
 
     // Fechar Lightbox
     const closeLightbox = () => lightbox.classList.remove('show');
     document.querySelector('.lightbox-close')?.addEventListener('click', closeLightbox);
+    
+    // Fechar ao clicar fora da imagem
     lightbox.addEventListener('click', (e) => {
-        if (e.target.classList.contains('lightbox-slide') || e.target.id === 'lightbox') closeLightbox();
+        if (e.target.classList.contains('lightbox-slide')) closeLightbox();
     });
 
-    // Navegação via Botões e Teclado
+    // Navegação via Botões
     document.querySelector('.lightbox-next')?.addEventListener('click', (e) => {
         e.stopPropagation();
         if (currentIndex < galleryImages.length - 1) { currentIndex++; updateSlider(); }
@@ -118,40 +120,42 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentIndex > 0) { currentIndex--; updateSlider(); }
     });
 
-    window.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('show')) return;
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight' && currentIndex < galleryImages.length - 1) { currentIndex++; updateSlider(); }
-        if (e.key === 'ArrowLeft' && currentIndex > 0) { currentIndex--; updateSlider(); }
-    });
+    // --- 5. LÓGICA DE ARRASTE (MOUSE E TOUCH) ---
+    
+    // Eventos de Mouse (Desktop)
+    slider.addEventListener('mousedown', dragStart);
+    slider.addEventListener('mouseup', dragEnd);
+    slider.addEventListener('mousemove', dragMove);
+    slider.addEventListener('mouseleave', dragEnd);
 
-    // --- 5. LÓGICA DE ARRASTE (SWIPE) IGUAL AO INSTAGRAM ---
-    slider.addEventListener('touchstart', touchStart);
-    slider.addEventListener('touchend', touchEnd);
-    slider.addEventListener('touchmove', touchMove);
+    // Eventos de Touch (Mobile)
+    slider.addEventListener('touchstart', dragStart);
+    slider.addEventListener('touchend', dragEnd);
+    slider.addEventListener('touchmove', dragMove);
 
-    function touchStart(e) {
-        startPos = e.touches[0].clientX;
+    function dragStart(e) {
         isDragging = true;
+        startPos = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
         animationID = requestAnimationFrame(animation);
-        slider.style.transition = 'none'; // Segue o dedo em tempo real
+        slider.style.transition = 'none';
+        slider.style.cursor = 'grabbing';
     }
 
-    function touchMove(e) {
-        if (isDragging) {
-            const currentPosition = e.touches[0].clientX;
-            currentTranslate = prevTranslate + currentPosition - startPos;
-        }
+    function dragMove(e) {
+        if (!isDragging) return;
+        const currentPosition = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        currentTranslate = prevTranslate + currentPosition - startPos;
     }
 
-    function touchEnd() {
+    function dragEnd() {
+        if (!isDragging) return;
         isDragging = false;
         cancelAnimationFrame(animationID);
+        slider.style.cursor = 'grab';
         slider.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
 
         const movedBy = currentTranslate - prevTranslate;
 
-        // Se arrastar mais que 100px, muda de foto
         if (movedBy < -100 && currentIndex < galleryImages.length - 1) currentIndex += 1;
         if (movedBy > 100 && currentIndex > 0) currentIndex -= 1;
 
@@ -164,7 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
             requestAnimationFrame(animation);
         }
     }
-    
-    // Ajustar slider caso a tela mude de tamanho (rotação do celular)
+
+    // Teclado
+    window.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('show')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight' && currentIndex < galleryImages.length - 1) { currentIndex++; updateSlider(); }
+        if (e.key === 'ArrowLeft' && currentIndex > 0) { currentIndex--; updateSlider(); }
+    });
+
     window.addEventListener('resize', updateSlider);
 });
