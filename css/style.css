@@ -1,115 +1,277 @@
-/* ==================== CONFIGURAÇÕES GERAIS ==================== */
+/* ==================== 1. CONFIGURAÇÕES GERAIS & TRAVA DE ZOOM ==================== */
 html, body {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background: #000;
-    color: #fff;
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+  max-width: 100%;
+  overflow-x: hidden; 
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #000;
+  color: #fff;
+  line-height: 1.6;
 }
-
+* { box-sizing: border-box; }
 h1, h2, h3 {
-    color: gold;
-    font-family: 'Oswald', sans-serif;
-    text-transform: uppercase;
+  color: gold;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+}
+h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
+/* ==================== 2. HERO SECTION ==================== */
+.hero {
+  height: 100vh;
+  background: url('../imagens/portfolio.jpeg') center/cover no-repeat !important;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), #000);
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.hero-video {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  max-width: 350px;
+}
+.hero-video video {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  border-radius: 20px;
+  border: 2px solid gold;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
     text-align: center;
+  }
+  .hero-video video { max-width: 180px; margin-top: 10px; }
 }
-
-/* ==================== CAIXAS (CARDS) & RESPONSIVIDADE ==================== */
-.container.card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 215, 0, 0.2);
-    border-radius: 20px;
-    padding: 30px;
-    margin: 20px auto;
-    max-width: 1100px;
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 40px;
-    align-items: center;
-    backdrop-filter: blur(10px);
+/* ==================== 3. GALERIA (PC E MOBILE) ==================== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
-
-.container.card.reverse { direction: rtl; }
-.container.card.reverse .text-content { direction: ltr; }
-.container.card.column { grid-template-columns: 1fr; text-align: center; }
-
-@media (max-width: 850px) {
-    .container.card { grid-template-columns: 1fr; text-align: center; padding: 20px; }
-    .container.card.reverse { direction: ltr; }
-}
-
-/* ==================== GALERIA EM LINHA ÚNICA ==================== */
-.gallery-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    padding: 20px 0;
-    cursor: grab;
-}
-
-.gallery-row {
-    display: flex;
-    gap: 15px;
-    padding: 0 20px;
-}
-
 .gallery-item {
-    flex: 0 0 280px;
-    height: 350px;
-    border-radius: 15px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 215, 0, 0.3);
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
 }
-
 .gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
-
-.gallery-wrapper::-webkit-scrollbar { height: 6px; }
-.gallery-wrapper::-webkit-scrollbar-thumb { background: gold; border-radius: 10px; }
-
-/* ==================== CORES DAS REDES SOCIAIS ==================== */
-.links-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
+@media (max-width: 768px) {
+  .gallery {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 12px;
+    padding: 20px 15px;
+  }
+  .gallery-item { flex: 0 0 85% !important; scroll-snap-align: center; }
+  .gallery::-webkit-scrollbar { display: none; }
 }
-
-.ig-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) !important; color: #fff !important; }
-.tk-btn { background: #000 !important; border: 1px solid #ff0050 !important; color: #fff !important; }
-.wa-btn { background: #25d366 !important; color: #fff !important; }
-.ge-btn { background: #ff6600 !important; color: #fff !important; }
-
-.btn, .links-grid a {
-    padding: 15px 25px;
+/* ==================== 4. PADRONIZAÇÃO DE IMAGENS & BOTÕES ==================== */
+.section img, .container img, .contact img {
+  max-width: 380px !important;
+  width: 90% !important;
+  height: auto;
+  border-radius: 15px;
+  margin: 20px auto;
+  display: block;
+}
+.btn, .links a {
+  display: block !important;
+  width: 90% !important;
+  max-width: 320px !important;
+  margin: 8px auto !important;
+  padding: 14px 20px;
+  background-color: gold !important;
+  color: #000 !important;
+  border-radius: 10px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none !important;
+}
+.btn.whatsapp, .links a[href*="wa.me"] { background-color: #25d366 !important; color: #fff !important; }
+.pix-box {
+    width: 90%;
+    max-width: 320px;
+    padding: 14px;
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid gold;
+    color: gold;
     border-radius: 10px;
-    text-decoration: none;
-    font-family: 'Oswald';
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 auto;
+}
+/* ==================== 5. LIGHTBOX (ESTILO INSTAGRAM) ==================== */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.98);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+}
+.lightbox.show { display: flex !important; }
+/* Trilho para as fotos deslizarem lado a lado */
+.lightbox-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+.lightbox-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.lightbox-slide img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* NOVO BOTÃO DE FECHAR CIRCULAR DOURADO */
+.lightbox-close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 42px;
+  height: 42px;
+  background: gold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10005;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+.lightbox-close::before, .lightbox-close::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 3px;
+  background: #000;
+  border-radius: 2px;
+}
+.lightbox-close::before { transform: rotate(45deg); }
+.lightbox-close::after { transform: rotate(-45deg); }
+/* Setas apenas para PC */
+.lightbox-prev, .lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gold;
+  font-size: 3.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10006;
+  padding: 20px;
+}
+.lightbox-prev { left: 10px; }
+.lightbox-next { right: 10px; }
+@media (max-width: 768px) {
+  .lightbox-prev, .lightbox-next { display: none !important; }
+}
+/* --- ESTILIZAÇÃO DO PIX (PADRÃO DOS BOTÕES) --- */
+.pix-container {
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+.pix-label {
+    display: block;
+    font-family: 'Oswald', sans-serif;
+    color: gold; /* Cor igual aos títulos */
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+}
+
+.pix-box {
+    display: block !important;
+    width: 90% !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
+    padding: 14px 20px;
+    background-color: gold !important; /* Fundo dourado igual aos botões */
+    color: #000 !important; /* Texto preto para contraste */
+    border-radius: 10px;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
-    transition: 0.3s;
-    display: inline-block;
-    min-width: 200px;
     text-align: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+}
+/* ==================== RODAPÉ (FOOTER) ==================== */
+.footer {
+    padding: 30px 20px;
+    background: #000;
+    text-align: center;
+    border-top: 1px solid rgba(255, 215, 0, 0.2); /* Linha dourada bem fina */
+    margin-top: 50px;
 }
 
-/* ==================== DEMAIS AJUSTES ==================== */
-.hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; background: url('../imagens/portfolio.jpeg') center/cover; }
-.overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, #000); }
-.hero-content { position: relative; z-index: 2; display: flex; align-items: center; gap: 50px; max-width: 1200px; width: 90%; }
-.hero-video video { width: 280px; border-radius: 20px; border: 2px solid gold; box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }
-
-@media (max-width: 768px) {
-    .hero-content { flex-direction: column; text-align: center; }
-    .hero-video video { width: 200px; }
+.footer p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #888; /* Cinza para não brigar com o conteúdo principal */
+    font-family: 'Roboto', sans-serif;
 }
 
-.pix-box { background: gold; color: #000; padding: 15px; border-radius: 10px; font-weight: 700; margin-top: 10px; font-size: 1.2rem; }
-.fade { opacity: 0; transform: translateY(30px); transition: 1s; }
-.fade.show { opacity: 1; transform: translateY(0); }
+.footer strong {
+    color: gold; /* Destaque no seu nome */
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
